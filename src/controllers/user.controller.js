@@ -100,8 +100,13 @@ export async function loginUser(req, res) {
       { expiresIn: "1d" },
     );
 
-    user.token = token;
-    await user.save();
+    // user.token = token;
+    // await user.save();
+
+    await userModel.updateOne(
+      { userId: user.userId },
+      { $set: { token: token } },
+    );
 
     return res.status(200).json({
       success: true,
@@ -116,18 +121,40 @@ export async function loginUser(req, res) {
     });
   }
 }
+// get Single user
+export async function getUser(req, res) {
+  try {
+    const user = await userModel.findById(req.user.id);
+
+    return res.status(200).json({
+      success: true,
+      message: "user",
+      user,
+    });
+  } catch (error) {
+    console.error("Error occurred in getAllUser API:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+}
+
 // getAllUser
 export async function getAllUser(req, res) {
-  const userId = req.user.userId;
-  console.log(userId);
-
-
-  return res.status(200).json({
-    success: true,
-    message: "List Of All Users!",
-  });
-}
-// update
-export async function update(req, res) {
-  const { userName, email, password, mobile, address, userType } = req.body;
+  try {
+    const users = await userModel.find({});
+    // console.log(users);
+    return res.status(200).json({
+      success: true,
+      message: "user",
+      users,
+    });
+  } catch (error) {
+    console.error("Error occurred in getAllUser API:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
 }

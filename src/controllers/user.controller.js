@@ -143,7 +143,7 @@ export async function getUser(req, res) {
 // getAllUser
 export async function getAllUser(req, res) {
   try {
-    const users = await userModel.find({});
+    const users = await userModel.find({}, { _id: 0 });
     // console.log(users);
     return res.status(200).json({
       success: true,
@@ -159,4 +159,8 @@ export async function getAllUser(req, res) {
   }
 }
 
-// new 
+export async function update(req, res) {
+  const { userName, email, password, mobile, address, userType } = req.body;
+
+ 
+}
